@@ -8,14 +8,38 @@ import (
 	"main.go/tuuz/Net"
 )
 
-func Craw_to_end(province, pageNo int, pageSize int) error {
+func Craw_to_end(province, pageNo, pageSize int) {
+	craw_init_db()
+	craw_to_end(province, pageNo, pageSize)
+	craw_db_dealer()
+}
+func craw_init_db() {
+	db := tuuz.Db().Table("c_eduyun_fujian")
+	db.Truncate()
+}
+
+func craw_db_dealer() {
+	tuuz.Db().Execute("update c_eduyun_fujian set `subject`=\"学科,非学科\" where `subject` not in (\"0\",\"1\");")
+	tuuz.Db().Execute("update c_eduyun_fujian set `subject`=\"非学科\" where `subject`=\"0\";")
+	tuuz.Db().Execute("update c_eduyun_fujian set `subject`=\"学科\" where `subject`=\"1\";")
+
+	tuuz.Db().Execute("update c_eduyun_fujian set `businessType`=\"线上\" where `businessType`=\"0\";")
+	tuuz.Db().Execute("update c_eduyun_fujian set `businessType`=\"线下\" where `businessType`=\"1\";")
+
+	tuuz.Db().Execute("UPDATE c_eduyun_fujian set object=REPLACE(object, \"0\", \"学龄前\");")
+	tuuz.Db().Execute("UPDATE c_eduyun_fujian set object=REPLACE(object, \"1\", \"义务教育阶段\");")
+	tuuz.Db().Execute("UPDATE c_eduyun_fujian set object=REPLACE(object, \"2\", \"高中阶段\");")
+	tuuz.Db().Execute("UPDATE c_eduyun_fujian set object=REPLACE(object, \"3\", \"成人\");")
+	tuuz.Db().Execute("UPDATE c_eduyun_fujian set object=REPLACE(object, \"4\", \"中职\");")
+}
+func craw_to_end(province, pageNo int, pageSize int) error {
 	fmt.Println("province", province, "pageNo", pageNo, "pageSize", pageSize)
 	page, err := craw_page(province, pageNo, pageSize)
 	if err != nil {
 		return err
 	}
 	lists := page.List
-	db := tuuz.Db().Table("c_eduyun")
+	db := tuuz.Db().Table("c_eduyun_fujian")
 	db.Data(lists)
 	_, err = db.Insert()
 	if err != nil {
@@ -25,7 +49,7 @@ func Craw_to_end(province, pageNo int, pageSize int) error {
 		fmt.Println("eduyun采集完成")
 	}
 	if page.PageNo < page.TotalPage {
-		return Craw_to_end(province, pageNo+1, pageSize)
+		return craw_to_end(province, pageNo+1, pageSize)
 	}
 	return nil
 }

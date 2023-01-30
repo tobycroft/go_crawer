@@ -9,6 +9,7 @@ import (
 )
 
 func Craw_to_end(province, pageNo int, pageSize int) error {
+	fmt.Println("province", province, "pageNo", pageNo, "pageSize", pageSize)
 	page, err := craw_page(province, pageNo, pageSize)
 	if err != nil {
 		return err
@@ -37,7 +38,7 @@ func Craw_to_end(province, pageNo int, pageSize int) error {
 		Log.Dbrr(err, tuuz.FUNCTION_ALL())
 		return err
 	}
-	if page.PageNo >= page.TotalPage {
+	if page.PageNo < page.TotalPage {
 		Craw_to_end(province, pageNo+1, pageSize)
 	}
 	fmt.Println("eduyun采集完成")

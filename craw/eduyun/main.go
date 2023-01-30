@@ -16,22 +16,6 @@ func Craw_to_end(province, pageNo int, pageSize int) error {
 	}
 	lists := page.List
 	db := tuuz.Db().Table("c_eduyun")
-	//data := map[string]any{
-	//	"schoolLicenseNo": schoolLicenseNo,
-	//	"corpProvince":    schoolLicenseNo,
-	//	"subject":         subject,
-	//	"corpName":        corpName,
-	//	"corpLogo":        corpLogo,
-	//	"pkSpInfo":        pkSpInfo,
-	//	"corpArea":        corpArea,
-	//	"certificateNo":   certificateNo,
-	//	"corpCity":        corpCity,
-	//	"cityName":        cityName,
-	//	"areaName":        areaName,
-	//	"provinceName":    provinceName,
-	//	"businessType":    businessType,
-	//	"object":          object,
-	//}
 	db.Data(lists)
 	_, err = db.Insert()
 	if err != nil {
@@ -41,7 +25,7 @@ func Craw_to_end(province, pageNo int, pageSize int) error {
 		fmt.Println("eduyun采集完成")
 	}
 	if page.PageNo < page.TotalPage {
-		Craw_to_end(province, pageNo+1, pageSize)
+		return Craw_to_end(province, pageNo+1, pageSize)
 	}
 	return nil
 }
@@ -49,7 +33,7 @@ func Craw_to_end(province, pageNo int, pageSize int) error {
 func craw_page(province, pageNo, pageSize any) (Page, error) {
 	var page Page
 	post := map[string]interface{}{
-		"province": province,
+		//"province": province,
 		"pageNo":   pageNo,
 		"pageSize": pageSize,
 	}

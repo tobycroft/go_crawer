@@ -20,6 +20,10 @@ func (self *Interface) craw_init() {
 	self.C = colly.NewCollector()
 }
 
+func (self *Interface) repeat() {
+
+}
+
 func (self *Interface) craw_visit() {
 	self.C.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=11728812")
 }

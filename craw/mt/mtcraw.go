@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+func Craw_mt() {
+
+}
+
 func main() {
 
 	c := colly.NewCollector()

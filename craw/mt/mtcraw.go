@@ -8,24 +8,29 @@ import (
 	"strings"
 )
 
-func Craw_mt() {
-
+type Interface struct {
+	C *colly.Collector
 }
 
-func main() {
+func (self *Interface) Craw_mt() {
+	self.craw_init()
+}
 
-	c := colly.NewCollector()
+func (self *Interface) craw_init() {
+	self.C = colly.NewCollector()
+}
 
-	// Find and visit all links
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
-		e.Request.Visit(e.Attr("href"))
-	})
+func (self *Interface) craw_visit() {
+	self.C.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=11728812")
+}
 
-	c.OnRequest(func(r *colly.Request) {
+func (self *Interface) main() {
+
+	self.C.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL)
 	})
 
-	c.OnResponse(func(e *colly.Response) {
+	self.C.OnResponse(func(e *colly.Response) {
 		body := string(e.Body)
 		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
 		bodys2 := bodys1[len(bodys1)-1]
@@ -79,11 +84,9 @@ func main() {
 		}
 	})
 
-	c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=11728812")
-
 }
 
-func craw(tech_id string) error {
+func (self *Interface) craw(tech_id string) error {
 
 	c := colly.NewCollector()
 

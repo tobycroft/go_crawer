@@ -9,11 +9,11 @@ import (
 )
 
 func Craw_to_end(province, pageNo, pageSize int) {
-	craw_init_db()
+	craw_init_db_fujian()
 	craw_to_end(province, pageNo, pageSize)
 	craw_db_dealer()
 }
-func craw_init_db() {
+func craw_init_db_fujian() {
 	db := tuuz.Db().Table("c_eduyun_fujian")
 	db.Truncate()
 }

@@ -65,6 +65,10 @@ func (self *MtCraw) Craw_ready() {
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.WorkYears)
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.WorkYearsStr)
 		fmt.Println(bff.ResponseData[0].Data.Data.TechnicianID)
+		if bff.ResponseData[0].Data.Data.TechnicianID == 0 {
+			fmt.Println("技师id=0")
+			return
+		}
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.PhotoURL)
 		fmt.Println(bff.ResponseData[0].Data.Data.ShopIDForFe)
 

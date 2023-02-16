@@ -36,6 +36,7 @@ func main() {
 	//}
 	//eduyun.Craw_to_end(350000, 1, 500)
 	var mtc mt.MtCraw
+	go mtc.Craw_string()
 	go mtc.Craw_insert()
 	mtc.Craw_Init()
 	mtc.Craw_ready()

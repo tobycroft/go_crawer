@@ -31,6 +31,7 @@ func (self *MtCraw) Craw_ready() {
 
 	self.c.OnResponse(func(e *colly.Response) {
 		SystemParamModel.Api_set_val("mtid", self.maxid+1)
+		go self.Craw_start()
 		body := string(e.Body)
 		//fmt.Println(body)
 		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
@@ -83,7 +84,6 @@ var crawData = make(chan BffData, 100)
 
 func (self *MtCraw) Craw_insert() {
 	for bff := range crawData {
-		go self.Craw_start()
 		db := tuuz.Db().Table("mt_craw")
 		db.Where("techid", bff.ResponseData[0].Data.Data.TechnicianID)
 		ret, err := db.Find()

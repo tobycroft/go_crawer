@@ -23,6 +23,21 @@ func Api_find_val(key interface{}) interface{} {
 	}
 }
 
+func Api_set_val(key, val interface{}) bool {
+	db := tuuz.Db().Table(Table)
+	db.Where("key", key)
+	db.Data(map[string]interface{}{
+		"val": val,
+	})
+	_, err := db.Update()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return false
+	} else {
+		return true
+	}
+}
+
 func Api_KV() map[string]string {
 	db := tuuz.Db().Table(Table)
 	ret, err := db.Get()

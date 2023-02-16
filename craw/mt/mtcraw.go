@@ -5,6 +5,7 @@ import (
 	"github.com/gocolly/colly/v2"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/tobycroft/Calc"
+	"main.go/common/BaseModel/SystemParamModel"
 	"main.go/tuuz"
 	"strings"
 )
@@ -94,17 +95,14 @@ func (self *MtCraw) Craw_ready() {
 
 }
 
-func (self *MtCraw) Craw_start() error {
-	db := tuuz.Db().Table("mt_craw")
-	db.OrderBy("id desc")
-	lastid, err := db.Value("techid")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("jishi:", lastid.(int64)+1)
-	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String((lastid.(int64) + 1)))
-	return nil
+func (self *MtCraw) Craw_start() {
+	mtid := SystemParamModel.Api_find_val("mtid")
+	lastid := Calc.Any2Int64(mtid)
 
+	SystemParamModel.Api_set_val("mtid", lastid+1)
+
+	fmt.Println("jishi:", lastid+1)
+	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(lastid+1))
 }
 
 type Data struct {

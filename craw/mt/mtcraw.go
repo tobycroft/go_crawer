@@ -29,16 +29,27 @@ func (self *MtCraw) Craw_ready() {
 
 	self.c.OnResponse(func(e *colly.Response) {
 		body := string(e.Body)
+		//fmt.Println(body)
 		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
 		bodys2 := bodys1[len(bodys1)-1]
 		bodys3 := strings.Split(bodys2, "</script>")
 		bodys4 := bodys3[0]
 		s6 := strings.TrimSpace(bodys4)
 		var datas Data
-		jsoniter.UnmarshalFromString(s6, &datas)
+		err := jsoniter.UnmarshalFromString(s6, &datas)
+		if err != nil {
+			fmt.Println("无数据")
+			//Log.Crrs(errors.New("无数据"), tuuz.FUNCTION_ALL())
+			return
+		}
 
 		var bff BffData
-		jsoniter.UnmarshalFromString(datas.BffData[0], &bff)
+		err2 := jsoniter.UnmarshalFromString(datas.BffData[0], &bff)
+		if err2 != nil {
+			fmt.Println("无数据")
+			//Log.Crrs(errors.New("无数据"), tuuz.FUNCTION_ALL())
+			return
+		}
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.Name)
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.Skills)
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.WorkYears)
@@ -90,7 +101,7 @@ func (self *MtCraw) Craw_start() error {
 	if err != nil {
 		panic(err)
 	}
-
+	fmt.Println("jishi:", lastid.(int64)+1)
 	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String((lastid.(int64) + 1)))
 	return nil
 

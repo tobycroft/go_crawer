@@ -30,10 +30,7 @@ func (self *MtCraw) Craw_ready() {
 	})
 
 	self.c.OnResponse(func(e *colly.Response) {
-		defer func() {
-			SystemParamModel.Api_set_val("mtid", self.maxid+1)
-			self.Craw_start()
-		}()
+		SystemParamModel.Api_set_val("mtid", self.maxid+1)
 		body := string(e.Body)
 		//fmt.Println(body)
 		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
@@ -77,7 +74,16 @@ func (self *MtCraw) Craw_ready() {
 		fmt.Println(bff.ResponseData[0].Data.Data.Share.Title)
 		fmt.Println(bff.ResponseData[0].Data.Data.Share.Desc)
 		fmt.Println(bff.ResponseData[0].Data.Data.Share.URL)
+		crawData <- bff
+	})
 
+}
+
+var crawData = make(chan BffData, 100)
+
+func (self *MtCraw) Craw_insert() {
+	for bff := range crawData {
+		self.Craw_start()
 		db := tuuz.Db().Table("mt_craw")
 		db.Where("techid", bff.ResponseData[0].Data.Data.TechnicianID)
 		ret, err := db.Find()
@@ -108,8 +114,7 @@ func (self *MtCraw) Craw_ready() {
 			panic(err)
 		}
 
-	})
-
+	}
 }
 
 func (self *MtCraw) Craw_start() {

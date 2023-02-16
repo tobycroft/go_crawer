@@ -11,7 +11,8 @@ import (
 )
 
 type MtCraw struct {
-	c *colly.Collector
+	c     *colly.Collector
+	maxid int64
 }
 
 func (self *MtCraw) Craw_Init() {
@@ -29,6 +30,8 @@ func (self *MtCraw) Craw_ready() {
 	})
 
 	self.c.OnResponse(func(e *colly.Response) {
+		SystemParamModel.Api_set_val("mtid", self.maxid+1)
+		self.Craw_start()
 		body := string(e.Body)
 		//fmt.Println(body)
 		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
@@ -69,10 +72,10 @@ func (self *MtCraw) Craw_ready() {
 		if err != nil {
 			panic(err)
 		}
-		if len(ret) > 0 {
-			panic("已经存在")
+		id := "0"
+		if len(ret) > 1 {
+			id = Calc.Any2String(ret["id"])
 		}
-
 		db = tuuz.Db().Table("mt_craw")
 		data := map[string]interface{}{
 			"name":         bff.ResponseData[0].Data.Data.AttrValues.Name,
@@ -85,6 +88,7 @@ func (self *MtCraw) Craw_ready() {
 			"title":        bff.ResponseData[0].Data.Data.Share.Title,
 			"desc":         bff.ResponseData[0].Data.Data.Share.Desc,
 			"url":          bff.ResponseData[0].Data.Data.Share.URL,
+			"repeat_id":    id,
 		}
 		db.Data(data)
 		_, err = db.Insert()
@@ -97,12 +101,10 @@ func (self *MtCraw) Craw_ready() {
 
 func (self *MtCraw) Craw_start() {
 	mtid := SystemParamModel.Api_find_val("mtid")
-	lastid := Calc.Any2Int64(mtid)
+	self.maxid = Calc.Any2Int64(mtid)
 
-	SystemParamModel.Api_set_val("mtid", lastid+1)
-
-	fmt.Println("jishi:", lastid+1)
-	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(lastid+1))
+	fmt.Println("jishi:", self.maxid+1)
+	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(self.maxid+1))
 }
 
 type Data struct {

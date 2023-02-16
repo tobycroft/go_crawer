@@ -31,7 +31,6 @@ func (self *MtCraw) Craw_ready() {
 
 	self.c.OnResponse(func(e *colly.Response) {
 		SystemParamModel.Api_set_val("mtid", self.maxid+1)
-		go self.Craw_start()
 		body := string(e.Body)
 		go func(body string) {
 			//fmt.Println(body)
@@ -78,6 +77,8 @@ func (self *MtCraw) Craw_ready() {
 			fmt.Println(bff.ResponseData[0].Data.Data.Share.URL)
 			crawData <- bff
 		}(body)
+		go self.Craw_start()
+
 	})
 
 }

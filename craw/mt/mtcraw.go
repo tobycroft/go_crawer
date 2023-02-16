@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly/v2"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/tobycroft/Calc"
 	"main.go/tuuz"
 	"strings"
 )
@@ -100,7 +101,7 @@ func (self *Interface) StartCraw() error {
 		panic(err)
 	}
 
-	self.C.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + (lastid.(int64) + 1))
+	self.C.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String((lastid.(int64) + 1)))
 	return nil
 
 }

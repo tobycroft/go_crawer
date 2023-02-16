@@ -83,7 +83,7 @@ var crawData = make(chan BffData, 100)
 
 func (self *MtCraw) Craw_insert() {
 	for bff := range crawData {
-		self.Craw_start()
+		go self.Craw_start()
 		db := tuuz.Db().Table("mt_craw")
 		db.Where("techid", bff.ResponseData[0].Data.Data.TechnicianID)
 		ret, err := db.Find()

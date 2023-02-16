@@ -1,14 +1,12 @@
 package mt
 
 import (
-	"errors"
 	"fmt"
 	"github.com/gocolly/colly/v2"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/tobycroft/Calc"
 	"main.go/common/BaseModel/SystemParamModel"
 	"main.go/tuuz"
-	"main.go/tuuz/Log"
 	"strings"
 )
 
@@ -46,22 +44,22 @@ func (self *MtCraw) Craw_ready() {
 		var datas Data
 		err := jsoniter.UnmarshalFromString(s6, &datas)
 		if err != nil {
-			fmt.Println("无数据")
-			Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
+			fmt.Println(self.maxid, "无数据")
+			//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
 			return
 		}
 
 		var bff BffData
 		err2 := jsoniter.UnmarshalFromString(datas.BffData[0], &bff)
 		if err2 != nil {
-			fmt.Println("无数据")
-			Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
+			fmt.Println(self.maxid, "无数据")
+			//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
 			return
 		}
 		fmt.Println("姓名:", bff.ResponseData[0].Data.Data.AttrValues.Name)
 		if bff.ResponseData[0].Data.Data.AttrValues.Name == "" {
-			fmt.Println("姓名空数据")
-			Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"姓名空数据"), tuuz.FUNCTION_ALL())
+			fmt.Println(self.maxid, "姓名空数据")
+			//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"姓名空数据"), tuuz.FUNCTION_ALL())
 			return
 		}
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.Skills)
@@ -69,8 +67,8 @@ func (self *MtCraw) Craw_ready() {
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.WorkYearsStr)
 		fmt.Println(bff.ResponseData[0].Data.Data.TechnicianID)
 		if bff.ResponseData[0].Data.Data.TechnicianID == 0 {
-			fmt.Println("技师id=0")
-			Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"技师id=0"), tuuz.FUNCTION_ALL())
+			fmt.Println(Calc.Any2String(self.maxid) + "技师id=0")
+			//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"技师id=0"), tuuz.FUNCTION_ALL())
 			return
 		}
 		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.PhotoURL)

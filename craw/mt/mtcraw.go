@@ -31,50 +31,53 @@ func (self *MtCraw) Craw_ready() {
 
 	self.c.OnResponse(func(e *colly.Response) {
 		SystemParamModel.Api_set_val("mtid", self.maxid+1)
+		go self.Craw_start()
 		body := string(e.Body)
-		//fmt.Println(body)
-		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
-		bodys2 := bodys1[len(bodys1)-1]
-		bodys3 := strings.Split(bodys2, "</script>")
-		bodys4 := bodys3[0]
-		s6 := strings.TrimSpace(bodys4)
-		var datas Data
-		err := jsoniter.UnmarshalFromString(s6, &datas)
-		if err != nil {
-			fmt.Println(self.maxid, "无数据")
-			//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
-			return
-		}
+		go func(body string) {
+			//fmt.Println(body)
+			bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
+			bodys2 := bodys1[len(bodys1)-1]
+			bodys3 := strings.Split(bodys2, "</script>")
+			bodys4 := bodys3[0]
+			s6 := strings.TrimSpace(bodys4)
+			var datas Data
+			err := jsoniter.UnmarshalFromString(s6, &datas)
+			if err != nil {
+				fmt.Println(self.maxid, "无数据")
+				//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
+				return
+			}
 
-		var bff BffData
-		err2 := jsoniter.UnmarshalFromString(datas.BffData[0], &bff)
-		if err2 != nil {
-			fmt.Println(self.maxid, "无数据")
-			//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
-			return
-		}
-		fmt.Println("姓名:", bff.ResponseData[0].Data.Data.AttrValues.Name)
-		if bff.ResponseData[0].Data.Data.AttrValues.Name == "" {
-			fmt.Println(self.maxid, "姓名空数据")
-			//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"姓名空数据"), tuuz.FUNCTION_ALL())
-			return
-		}
-		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.Skills)
-		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.WorkYears)
-		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.WorkYearsStr)
-		fmt.Println(bff.ResponseData[0].Data.Data.TechnicianID)
-		if bff.ResponseData[0].Data.Data.TechnicianID == 0 {
-			fmt.Println(Calc.Any2String(self.maxid) + "技师id=0")
-			//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"技师id=0"), tuuz.FUNCTION_ALL())
-			return
-		}
-		fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.PhotoURL)
-		fmt.Println(bff.ResponseData[0].Data.Data.ShopIDForFe)
+			var bff BffData
+			err2 := jsoniter.UnmarshalFromString(datas.BffData[0], &bff)
+			if err2 != nil {
+				fmt.Println(self.maxid, "无数据")
+				//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
+				return
+			}
+			fmt.Println("姓名:", bff.ResponseData[0].Data.Data.AttrValues.Name)
+			if bff.ResponseData[0].Data.Data.AttrValues.Name == "" {
+				fmt.Println(self.maxid, "姓名空数据")
+				//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"姓名空数据"), tuuz.FUNCTION_ALL())
+				return
+			}
+			fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.Skills)
+			fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.WorkYears)
+			fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.WorkYearsStr)
+			fmt.Println(bff.ResponseData[0].Data.Data.TechnicianID)
+			if bff.ResponseData[0].Data.Data.TechnicianID == 0 {
+				fmt.Println(Calc.Any2String(self.maxid) + "技师id=0")
+				//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"技师id=0"), tuuz.FUNCTION_ALL())
+				return
+			}
+			fmt.Println(bff.ResponseData[0].Data.Data.AttrValues.PhotoURL)
+			fmt.Println(bff.ResponseData[0].Data.Data.ShopIDForFe)
 
-		fmt.Println(bff.ResponseData[0].Data.Data.Share.Title)
-		fmt.Println(bff.ResponseData[0].Data.Data.Share.Desc)
-		fmt.Println(bff.ResponseData[0].Data.Data.Share.URL)
-		crawData <- bff
+			fmt.Println(bff.ResponseData[0].Data.Data.Share.Title)
+			fmt.Println(bff.ResponseData[0].Data.Data.Share.Desc)
+			fmt.Println(bff.ResponseData[0].Data.Data.Share.URL)
+			crawData <- bff
+		}(body)
 	})
 
 }

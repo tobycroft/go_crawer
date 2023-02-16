@@ -31,19 +31,8 @@ func (self *MtCraw) Craw_ready() {
 
 	self.c.OnResponse(func(e *colly.Response) {
 		SystemParamModel.Api_set_val("mtid", self.maxid+1)
-		go self.Craw_start()
-		crawData_body <- string(e.Body)
+		body := string(e.Body)
 		//fmt.Println(body)
-
-	})
-
-}
-
-var crawData = make(chan BffData, 100)
-var crawData_body = make(chan string, 100)
-
-func (self *MtCraw) Craw_string() {
-	for body := range crawData_body {
 		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
 		bodys2 := bodys1[len(bodys1)-1]
 		bodys3 := strings.Split(bodys2, "</script>")
@@ -86,8 +75,11 @@ func (self *MtCraw) Craw_string() {
 		fmt.Println(bff.ResponseData[0].Data.Data.Share.Desc)
 		fmt.Println(bff.ResponseData[0].Data.Data.Share.URL)
 		crawData <- bff
-	}
+	})
+
 }
+
+var crawData = make(chan BffData, 100)
 
 func (self *MtCraw) Craw_insert() {
 	for bff := range crawData {

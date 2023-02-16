@@ -30,7 +30,10 @@ func (self *MtCraw) Craw_ready() {
 	})
 
 	self.c.OnResponse(func(e *colly.Response) {
-		SystemParamModel.Api_set_val("mtid", self.maxid+1)
+		defer func() {
+			SystemParamModel.Api_set_val("mtid", self.maxid+1)
+			self.Craw_start()
+		}()
 		body := string(e.Body)
 		//fmt.Println(body)
 		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
@@ -94,7 +97,6 @@ func (self *MtCraw) Craw_ready() {
 		if err != nil {
 			panic(err)
 		}
-		self.Craw_start()
 
 	})
 

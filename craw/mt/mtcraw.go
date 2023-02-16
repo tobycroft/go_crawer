@@ -77,6 +77,7 @@ func (self *MtCraw) Craw_ready() {
 			fmt.Println(bff.ResponseData[0].Data.Data.Share.URL)
 			crawData <- bff
 		}(body)
+
 		go self.Craw_start()
 
 	})

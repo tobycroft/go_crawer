@@ -9,35 +9,25 @@ import (
 	"strings"
 )
 
-type Interface struct {
-	C *colly.Collector
+type MtCraw struct {
+	c *colly.Collector
 }
 
-func (self *Interface) Craw_mt() {
-	self.craw_init()
+func (self *MtCraw) Craw_Init() {
+	self.c = colly.NewCollector()
 }
 
-func (self *Interface) craw_init() {
-	self.C = colly.NewCollector()
+func (self *MtCraw) ManualVisit(addr string) {
+	self.c.Visit(addr)
 }
 
-func (self *Interface) repeat() {
+func (self *MtCraw) Craw_ready() {
 
-}
-
-func (self *Interface) craw_visit() {
-	self.C.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=11728812")
-}
-
-func (self *Interface) CollyStandby() {
-
-	self.C = colly.NewCollector()
-
-	self.C.OnRequest(func(r *colly.Request) {
+	self.c.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL)
 	})
 
-	self.C.OnResponse(func(e *colly.Response) {
+	self.c.OnResponse(func(e *colly.Response) {
 		body := string(e.Body)
 		bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")
 		bodys2 := bodys1[len(bodys1)-1]
@@ -93,7 +83,7 @@ func (self *Interface) CollyStandby() {
 
 }
 
-func (self *Interface) StartCraw() error {
+func (self *MtCraw) Craw_start() error {
 	db := tuuz.Db().Table("mt_craw")
 	db.OrderBy("id desc")
 	lastid, err := db.Value("techid")
@@ -101,7 +91,7 @@ func (self *Interface) StartCraw() error {
 		panic(err)
 	}
 
-	self.C.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String((lastid.(int64) + 1)))
+	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String((lastid.(int64) + 1)))
 	return nil
 
 }

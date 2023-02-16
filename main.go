@@ -2,7 +2,7 @@ package main
 
 import (
 	"main.go/config/app_conf"
-	"main.go/craw/eduyun"
+	"main.go/craw/mt"
 	"os"
 )
 
@@ -33,5 +33,9 @@ func main() {
 	//	"pageNo":   2,
 	//	"pageSize": 1,
 	//}
-	eduyun.Craw_to_end(350000, 1, 500)
+	//eduyun.Craw_to_end(350000, 1, 500)
+	var mtc mt.MtCraw
+	mtc.Craw_Init()
+	mtc.Craw_ready()
+	mtc.Craw_start()
 }

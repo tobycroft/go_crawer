@@ -126,13 +126,13 @@ func (self *MtCraw) Craw_start() {
 	mtid := SystemParamModel.Api_find_val("mtid")
 	self.maxid = Calc.Any2Int64(mtid)
 
-	fmt.Println("jishi:", self.maxid+1)
-	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(self.maxid+1))
-	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(self.maxid+2))
-	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(self.maxid+3))
-	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(self.maxid+4))
-	self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(self.maxid+5))
-	SystemParamModel.Api_set_val("mtid", self.maxid+5)
+	time := int64(5)
+
+	fmt.Println("jishi:", self.maxid+time)
+	for i := int64(1); i <= time; i++ {
+		go self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(self.maxid+i))
+	}
+	SystemParamModel.Api_set_val("mtid", self.maxid+time)
 	wg.Wait()
 	self.Craw_start()
 }

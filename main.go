@@ -4,7 +4,6 @@ import (
 	"main.go/config/app_conf"
 	"main.go/craw/mt"
 	"os"
-	"time"
 )
 
 func init() {
@@ -40,7 +39,5 @@ func main() {
 	mtc.Craw_Init()
 	mtc.Craw_ready()
 	mtc.Craw_start()
-	for {
-		time.Sleep(1 * time.Second)
-	}
+	mtc.Craw_insert()
 }

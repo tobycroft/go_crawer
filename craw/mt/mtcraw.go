@@ -33,8 +33,8 @@ func (self *MtCraw) Craw_ready() {
 	})
 
 	self.c.OnResponse(func(e *colly.Response) {
+		wg.Done()
 		go func(bbody []byte) {
-			wg.Done()
 			body := string(bbody)
 			//fmt.Println(body)
 			bodys1 := strings.Split(body, "window.__INITIAL_STATE__ = ")

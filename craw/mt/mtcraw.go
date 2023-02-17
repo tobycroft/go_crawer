@@ -84,7 +84,7 @@ func (self *MtCraw) Craw_ready() {
 
 }
 
-var crawData = make(chan BffData, 100)
+var crawData = make(chan BffData, 5)
 
 func (self *MtCraw) Craw_insert() {
 	for bff := range crawData {

@@ -93,6 +93,7 @@ func (self *MtCraw) Craw_insert() {
 		ret, err := db.Find()
 		if err != nil {
 			panic(err)
+			return
 		}
 		id := "0"
 		if len(ret) > 1 {
@@ -116,6 +117,7 @@ func (self *MtCraw) Craw_insert() {
 		_, err = db.Insert()
 		if err != nil {
 			panic(err)
+			return
 		}
 
 	}

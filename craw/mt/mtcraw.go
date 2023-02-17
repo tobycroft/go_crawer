@@ -132,7 +132,7 @@ func (self *MtCraw) Craw_start() {
 	for i := int64(1); i <= time; i++ {
 		go self.c.Visit("https://g.meituan.com/domino/craftsman-app/craftsman-detail.html?technicianId=" + Calc.Any2String(self.maxid+i))
 	}
-	SystemParamModel.Api_set_val("mtid", self.maxid+time)
 	wg.Wait()
+	SystemParamModel.Api_set_val("mtid", self.maxid+time)
 	self.Craw_start()
 }

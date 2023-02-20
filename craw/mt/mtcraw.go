@@ -34,7 +34,7 @@ func (self *MtCraw) Craw_ready() {
 
 	self.c.OnError(func(e *colly.Response, err error) {
 		wg.Done()
-		fmt.Println("error:", e.Body, e.StatusCode, e.Trace)
+		fmt.Println("error:", string(e.Body), "\n", e.StatusCode, "\n", e.Trace)
 	})
 
 	self.c.OnResponse(func(e *colly.Response) {

@@ -34,7 +34,7 @@ func (self *MtCraw) Craw_ready() {
 
 	self.c.OnError(func(e *colly.Response, err error) {
 		wg.Done()
-		fmt.Println("error:", "\n", string(e.Body), "\n", e.StatusCode, "\n", e.Trace)
+		//fmt.Println("error:", "\n", string(e.Body), "\n", e.StatusCode, "\n", e.Trace)
 	})
 
 	self.c.OnResponse(func(e *colly.Response) {
@@ -129,7 +129,7 @@ func (self *MtCraw) Craw_insert() {
 }
 
 func (self *MtCraw) Craw_start() {
-	time := int64(4)
+	time := int64(5)
 
 	wg.Add(int(time))
 	mtid := SystemParamModel.Api_find_val("mtid")

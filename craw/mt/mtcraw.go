@@ -129,11 +129,11 @@ func (self *MtCraw) Craw_insert() {
 }
 
 func (self *MtCraw) Craw_start() {
-	wg.Add(5)
+	time := int64(4)
+
+	wg.Add(int(time))
 	mtid := SystemParamModel.Api_find_val("mtid")
 	self.maxid = Calc.Any2Int64(mtid)
-
-	time := int64(5)
 
 	fmt.Println("jishi:", self.maxid+time)
 	for i := int64(1); i <= time; i++ {

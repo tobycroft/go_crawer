@@ -64,7 +64,7 @@ func (self *MtCraw) Craw_ready() {
 			}
 			fmt.Println("姓名:", bff.ResponseData[0].Data.Data.AttrValues.Name)
 			if bff.ResponseData[0].Data.Data.AttrValues.Name == "" {
-				fmt.Println(self.maxid, "姓名空数据")
+				//fmt.Println(self.maxid, "姓名空数据")
 				//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"姓名空数据"), tuuz.FUNCTION_ALL())
 				return
 			}

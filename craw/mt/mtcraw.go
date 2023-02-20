@@ -50,7 +50,7 @@ func (self *MtCraw) Craw_ready() {
 			var datas Data
 			err := jsoniter.UnmarshalFromString(s6, &datas)
 			if err != nil {
-				fmt.Println(self.maxid, "无数据")
+				//fmt.Println(self.maxid, "无数据")
 				//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
 				return
 			}
@@ -58,7 +58,7 @@ func (self *MtCraw) Craw_ready() {
 			var bff BffData
 			err2 := jsoniter.UnmarshalFromString(datas.BffData[0], &bff)
 			if err2 != nil {
-				fmt.Println(self.maxid, "无数据")
+				//fmt.Println(self.maxid, "无数据")
 				//Log.Crrs(errors.New(Calc.Any2String(self.maxid)+"无数据"), tuuz.FUNCTION_ALL())
 				return
 			}

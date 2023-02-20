@@ -32,6 +32,11 @@ func (self *MtCraw) Craw_ready() {
 		fmt.Println("Visiting", r.URL)
 	})
 
+	self.c.OnError(func(e *colly.Response, err error) {
+		wg.Done()
+		fmt.Println("error:", e.Body, e.StatusCode, e.Trace)
+	})
+
 	self.c.OnResponse(func(e *colly.Response) {
 		wg.Done()
 		go func(bbody []byte) {

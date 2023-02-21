@@ -29,7 +29,7 @@ func (self *MtCraw) ManualVisit(addr string) {
 func (self *MtCraw) Craw_ready() {
 
 	self.c.OnRequest(func(r *colly.Request) {
-		//fmt.Println("Visiting", r.URL)
+		fmt.Println("Visiting", r.URL)
 	})
 
 	self.c.OnError(func(e *colly.Response, err error) {

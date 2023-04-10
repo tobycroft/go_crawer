@@ -1,8 +1,10 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/tobycroft/Calc"
 	"main.go/config/app_conf"
-	"main.go/craw/mt"
+	"main.go/route"
 	"os"
 )
 
@@ -20,6 +22,16 @@ func init() {
 
 func main() {
 
+	Calc.RefreshBaseNum()
+	mainroute := gin.Default()
+	//gin.SetMode(gin.ReleaseMode)
+	//gin.DefaultWriter = ioutil.Discard
+	mainroute.SetTrustedProxies([]string{"0.0.0.0/0"})
+	mainroute.SecureJsonPrefix(app_conf.SecureJsonPrefix)
+	route.OnRoute(mainroute)
+	mainroute.Run(":80")
+	mainroute.Run(":81")
+
 	//Calc.RefreshBaseNum()
 	//mainroute := gin.Default()
 	////gin.SetMode(gin.ReleaseMode)
@@ -34,10 +46,10 @@ func main() {
 	//	"pageSize": 1,
 	//}
 	//eduyun.Craw_to_end(350000, 1, 500)
-	var mtc mt.MtCraw
-	go mtc.Craw_insert()
-	mtc.Craw_Init()
-	mtc.Craw_ready()
-	mtc.Craw_start()
-	mtc.Craw_insert()
+	//var mtc mt.MtCraw
+	//go mtc.Craw_insert()
+	//mtc.Craw_Init()
+	//mtc.Craw_ready()
+	//mtc.Craw_start()
+	//mtc.Craw_insert()
 }

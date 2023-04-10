@@ -16,7 +16,11 @@ func IndexController(route *gin.RouterGroup) {
 }
 
 func index(c *gin.Context) {
-	c.String(0, "index")
+	data, err := c.GetRawData()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(data))
 }
 
 func loginss(c *gin.Context) {

@@ -30,7 +30,7 @@ func main() {
 	mainroute.SecureJsonPrefix(app_conf.SecureJsonPrefix)
 	route.OnRoute(mainroute)
 	mainroute.Run(":80")
-	mainroute.Run(":81")
+	//mainroute.Run(":81")
 
 	//Calc.RefreshBaseNum()
 	//mainroute := gin.Default()

@@ -79,7 +79,7 @@ func dazhong_1(c *gin.Context) {
 				phone = result[1]
 			} else {
 				fmt.Println("phone No match found.")
-				return
+				//return
 			}
 			tuuz.Db().Table(Table).Where("shopid", shopid).Data(map[string]any{
 				"address": address,

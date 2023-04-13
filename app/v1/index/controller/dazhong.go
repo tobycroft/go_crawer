@@ -72,15 +72,17 @@ func dazhong_1(c *gin.Context) {
 				return
 			}
 
-			re = regexp.MustCompile(`data-phone="(\d+-\d+)"`)
+			re = regexp.MustCompile(`data-phone="(\d+.\d+)"`)
 			result := re.FindStringSubmatch(html)
 
 			if len(result) == 2 {
 				phone = result[1]
 			} else {
 				fmt.Println("phone No match found.")
+				fmt.Println(result)
 				//return
 			}
+
 			tuuz.Db().Table(Table).Where("shopid", shopid).Data(map[string]any{
 				"address": address,
 				"phone":   phone,

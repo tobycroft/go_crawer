@@ -83,7 +83,9 @@ func dazhong_1(c *gin.Context) {
 			tuuz.Db().Table(Table).Where("shopid", shopid).Data(map[string]any{
 				"address": address,
 				"phone":   phone,
-			})
+			}).Update()
+		} else {
+			fmt.Println("shopid No match found.")
 		}
 		//re := regexp.MustCompile(`<div class="address">\s+<span class="item">地址：</span>\s+(.*?)\s+</div>`)
 

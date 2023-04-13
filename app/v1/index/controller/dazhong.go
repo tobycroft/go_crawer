@@ -12,6 +12,7 @@ import (
 func DazhongController(route *gin.RouterGroup) {
 
 	route.Any("1", dazhong_1)
+	route.Any("link", dazhong_link)
 }
 
 type MtCraw struct {
@@ -91,4 +92,18 @@ func dazhong_1(c *gin.Context) {
 
 	}
 
+}
+
+func dazhong_link(c *gin.Context) {
+	datas, err := tuuz.Db().Table(Table).Where("address", "=", "").Get()
+	if err != nil {
+		Log.Dbrr(err, tuuz.FUNCTION_ALL())
+		return
+	}
+	c.Header("Content-Type", "text/html")
+	c.String(200, "<html><body>")
+	for _, data := range datas {
+		c.String(200, "<a href=\"%s\">%s</a></br>\n", data["url"], data["url"])
+	}
+	c.String(200, "</body></html>")
 }

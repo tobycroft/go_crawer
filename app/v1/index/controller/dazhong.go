@@ -28,19 +28,30 @@ func dazhong_1(c *gin.Context) {
 		fmt.Println(err)
 	}
 	html := string(body)
-	city := ""
-	re := regexp.MustCompile(`<span class="J-current-city">(.*?)</span>`)
-	match := re.FindStringSubmatch(html)
 
-	if len(match) > 1 {
-		city = match[1]
-	} else {
-		fmt.Println("未找到城市")
-		return
-	}
-	re = regexp.MustCompile(`<a .*? data-shopid="(.*?)" .*? title="(.*?)" .*? href="(.*?)">`)
+	re := regexp.MustCompile(`<a .*? data-shopid="(.*?)" .*? title="(.*?)" .*? href="(.*?)">`)
 	matchess := re.FindAllStringSubmatch(html, -1)
 	if len(matchess) > 0 {
+		city := ""
+		re = regexp.MustCompile(`<span class="J-current-city">(.*?)</span>`)
+		match := re.FindStringSubmatch(html)
+
+		if len(match) > 1 {
+			city = match[1]
+		} else {
+			fmt.Println("未找到城市")
+			return
+		}
+		cata := ""
+
+		re = regexp.MustCompile(`<a href="[^"]+" class="cur" data-cat-id="[^"]+" data-click-name=".*."><span>([^<]+)</span></a>`)
+		match = re.FindStringSubmatch(html)
+		if len(match) > 1 {
+			cata = match[1] // Output: 书法
+		} else {
+			fmt.Println("未找到cata")
+			return
+		}
 		for _, matches := range matchess {
 			if len(matches) > 0 {
 				shopid := matches[1]
@@ -48,6 +59,7 @@ func dazhong_1(c *gin.Context) {
 				href := matches[3]
 				data := map[string]any{
 					"name":   title,
+					"cata":   cata,
 					"shopid": shopid,
 					"url":    href,
 					"city":   city,

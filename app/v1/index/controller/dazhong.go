@@ -79,40 +79,51 @@ func dazhong_1(c *gin.Context) {
 		}
 	} else {
 		//fmt.Println(html)
+		shopid := ""
 		re := regexp.MustCompile(`\/shop\/(\w+)\/review`)
 		match := re.FindStringSubmatch(html)
 		if len(match) > 1 {
-			shopid := match[1]
-			re = regexp.MustCompile(`<div class="address">\s+<span class="item">地址：</span>\s+(.*?)\s+</div>`)
-
+			shopid = match[1]
+		} else {
+			re = regexp.MustCompile(`shopId:'(\w+)'`)
 			match := re.FindStringSubmatch(html)
-			address := ""
-			phone := ""
 			if len(match) > 1 {
-				address = match[1]
+				shopid = (match[1])
+
 			} else {
-				fmt.Println("address No match found")
+				fmt.Println("shopid No match found.")
 				return
 			}
-
-			re = regexp.MustCompile(`data-phone="(\d+.\d+)"`)
-			result := re.FindStringSubmatch(html)
-
-			if len(result) == 2 {
-				phone = result[1]
-			} else {
-				fmt.Println("phone No match found.")
-				fmt.Println(result)
-				//return
-			}
-
-			tuuz.Db().Table(Table).Where("shopid", shopid).Data(map[string]any{
-				"address": address,
-				"phone":   phone,
-			}).Update()
-		} else {
-			fmt.Println("shopid No match found.")
+			//fmt.Println(html)
 		}
+
+		re = regexp.MustCompile(`<div class="address">\s+<span class="item">地址：</span>\s+(.*?)\s+</div>`)
+
+		match = re.FindStringSubmatch(html)
+		address := ""
+		phone := ""
+		if len(match) > 1 {
+			address = match[1]
+		} else {
+			fmt.Println("address No match found")
+			return
+		}
+
+		re = regexp.MustCompile(`data-phone="(\d+.\d+)"`)
+		result := re.FindStringSubmatch(html)
+
+		if len(result) == 2 {
+			phone = result[1]
+		} else {
+			fmt.Println("phone No match found.")
+			fmt.Println(result)
+		}
+
+		tuuz.Db().Table(Table).Where("shopid", shopid).Data(map[string]any{
+			"address": address,
+			"phone":   phone,
+		}).Update()
+		fmt.Println("update", shopid, address, phone)
 		//re := regexp.MustCompile(`<div class="address">\s+<span class="item">地址：</span>\s+(.*?)\s+</div>`)
 
 	}

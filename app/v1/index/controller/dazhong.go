@@ -28,7 +28,17 @@ func dazhong_1(c *gin.Context) {
 		fmt.Println(err)
 	}
 	html := string(body)
-	re := regexp.MustCompile(`<a .*? data-shopid="(.*?)" .*? title="(.*?)" .*? href="(.*?)">`)
+	city := ""
+	re := regexp.MustCompile(`<span class="J-current-city">(.*?)</span>`)
+	match := re.FindStringSubmatch(html)
+
+	if len(match) > 1 {
+		city = match[1]
+	} else {
+		fmt.Println("未找到城市")
+		return
+	}
+	re = regexp.MustCompile(`<a .*? data-shopid="(.*?)" .*? title="(.*?)" .*? href="(.*?)">`)
 	matchess := re.FindAllStringSubmatch(html, -1)
 	if len(matchess) > 0 {
 		for _, matches := range matchess {
@@ -40,6 +50,7 @@ func dazhong_1(c *gin.Context) {
 					"name":   title,
 					"shopid": shopid,
 					"url":    href,
+					"city":   city,
 				}
 				db := tuuz.Db().Table(Table)
 				thedata, err := db.Where("name", title).Find()
